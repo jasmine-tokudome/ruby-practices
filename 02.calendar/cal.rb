@@ -70,3 +70,6 @@ print day_of_week # 曜日
     print "\n"
   end
 end
+
+print "\n"
+
