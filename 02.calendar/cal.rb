@@ -6,7 +6,6 @@ require 'optparse'
 params = ARGV.getopts("y:m:")
 
 request_year = params["y"].to_i #入力した年
-
 request_month = params["m"].to_i #入力した月
 
 if request_year == 0 && request_month == 0
@@ -57,14 +56,30 @@ print title.to_s.center(22)
 day_of_week= "\n 日 月 火 水 木 金 土 \n"
 print day_of_week # 曜日
 
+now = Date.today #反転させる必要があるか調べるための準備
+just_today = now.day.to_i
+required_year = first_day.year.to_i
+required_month = first_day.month.to_i
+retuen_date = Date.new(required_year,required_month,just_today)
+
+# puts "\e[7m#{just_today}\e[0m"
+
 (1..days_total).each do | cal |
   if
     cal <= start_at
     print "   "
   else
-    num = cal - start_at
-    num = num.to_s.rjust(3)
-    print num
+    num = cal - start_at # 当月の日付
+    # num = num.to_s.rjust(3)
+    #   print num
+    if
+      num == just_today && now == retuen_date
+      num = num.to_s.rjust(3)
+      print "\e[7m#{num}\e[0m"
+    else
+      num = num.to_s.rjust(3)
+      print num
+    end
   end
   if cal % 7 == 0
     print "\n"
