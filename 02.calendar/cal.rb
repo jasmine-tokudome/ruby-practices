@@ -51,7 +51,7 @@ days_total = days + start_at # 開始日までの空白(スペース)と当月�
 
 day_of_week= "\n 日 月 火 水 木 金 土 \n"
 
-title =  "  #{first_day.month}月 #{first_day.year}   \n"
+title =  "  #{first_day.month}月 #{first_day.year}  "
 print title
 
 day_of_week= "\n 日 月 火 水 木 金 土 \n"
