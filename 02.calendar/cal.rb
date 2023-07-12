@@ -26,7 +26,7 @@ end
 
 what_day = first_day.strftime('%a') # 1日の曜日
 
-# start_atはカレンダーで1二表示される位置
+# start_atはカレンダーで「1」が表示される位置
 if what_day == "Sun"
   start_at = 0
 elsif what_day == "Mon"
@@ -62,16 +62,12 @@ required_year = first_day.year.to_i
 required_month = first_day.month.to_i
 retuen_date = Date.new(required_year,required_month,just_today)
 
-# puts "\e[7m#{just_today}\e[0m"
-
 (1..days_total).each do | cal |
   if
     cal <= start_at
     print "   "
   else
     num = cal - start_at # 当月の日付
-    # num = num.to_s.rjust(3)
-    #   print num
     if
       num == just_today && now == retuen_date
       num = num.to_s.rjust(3)
