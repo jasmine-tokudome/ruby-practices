@@ -41,12 +41,12 @@ print title.to_s.center(22)
 week_labels= "\n 日 月 火 水 木 金 土 "
 puts week_labels # 曜日
 
-
-today_date = Date.today #反転させる必要があるか調べるための準備
-just_today = today_date.day.to_i
-required_year = first_day.year.to_i
-required_month = first_day.month.to_i
-retuen_date = Date.new(required_year,required_month,just_today)
+#反転させる必要があるか調べるための準備
+today_date = Date.today
+just_today = today_date.day
+output_year = first_day.year
+output_month = first_day.month
+retuen_date = Date.new(output_year,output_month,just_today)
 
 (1..total_days).each do | cal |
   if cal <= start_at
