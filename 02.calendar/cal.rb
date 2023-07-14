@@ -24,24 +24,8 @@ else
   last_day = Date.new(input_year,input_month,-1)
 end
 
-what_day = first_day.strftime('%a') # 1日の曜日
-
-# start_atはカレンダーで「1」が表示される位置
-if what_day == "Sun"
-  start_at = 0
-elsif what_day == "Mon"
-  start_at = 1
-elsif what_day == "Tue"
-  start_at = 2
-elsif what_day == "Wed"
-  start_at = 3
-elsif what_day == "Thu"
-  start_at = 4
-elsif what_day == "Fri"
-  start_at = 5
-else what_day == "Sat"
-  start_at = 6
-end
+# 1日の曜日を取得する。start_atはカレンダーで「1」が表示される位置になる
+start_at = first_day.wday
 
 days_num = last_day - first_day +1
 days = days_num.to_i #当月の日数
@@ -62,8 +46,7 @@ required_month = first_day.month.to_i
 retuen_date = Date.new(required_year,required_month,just_today)
 
 (1..days_total).each do | cal |
-  if
-    cal <= start_at
+  if cal <= start_at
     print "   "
   else
     num = cal - start_at # 当月の日付
