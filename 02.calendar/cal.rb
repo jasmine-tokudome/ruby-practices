@@ -11,14 +11,14 @@ input_month = params["m"].to_i #入力した月
 today_date = Date.today
 
 if input_year == 0 && input_month == 0
-  this_year = today_date.year # 今年
+  manipulated_year = today_date.year # 今年
   this_month = today_date.month #今月
   first_day = Date.new(today_date.year,today_date.month,1) #今月1日
   last_day = Date.new(today_date.year,today_date.month,-1) #今月末日
 elsif input_year == 0 && input_month != 0 
-  this_year = today_date.year
-  first_day = Date.new(this_year,input_month,1)
-  last_day = Date.new(this_year,input_month,-1)
+  manipulated_year = today_date.year
+  first_day = Date.new(manipulated_year,input_month,1)
+  last_day = Date.new(manipulated_year,input_month,-1)
 else
   first_day = Date.new(input_year,input_month,1)
   last_day = Date.new(input_year,input_month,-1)
@@ -30,14 +30,17 @@ start_at = first_day.wday
 #当月の日数
 day_count = last_day.day
 
-total_days = day_count + start_at # 開始日までの空白(スペース)と当月の日数の合計
+# 開始日までの空白(スペース)と当月の日数の合計
+total_days = day_count + start_at
 
-week_labels= "\n 日 月 火 水 木 金 土 "
-
+# カレンダー上部のタイトル
 title =  "#{first_day.month}月#{first_day.year}"
 print title.to_s.center(22)
 
+# 曜日ラベル
+week_labels= "\n 日 月 火 水 木 金 土 "
 puts week_labels # 曜日
+
 
 today_date = Date.today #反転させる必要があるか調べるための準備
 just_today = today_date.day.to_i
