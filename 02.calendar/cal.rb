@@ -42,11 +42,8 @@ week_labels= "\n 日 月 火 水 木 金 土 "
 puts week_labels # 曜日
 
 #反転させる必要があるか調べるための準備
-today_date = Date.today
-just_today = today_date.day
-output_year = first_day.year
-output_month = first_day.month
-retuen_date = Date.new(output_year,output_month,just_today)
+just_today = Date.today.day
+retuen_date = Date.new(first_day.year,first_day.month,just_today)
 
 (1..total_days).each do | cal |
   if cal <= start_at
