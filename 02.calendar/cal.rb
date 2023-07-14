@@ -10,31 +10,22 @@ input_month = params['m'].to_i # 入力した月
 
 today_date = Date.today
 
-if input_year == 0 && input_month == 0
-  manipulated_year = today_date.year # 今年
-  this_month = today_date.month # 今月
-  first_day = Date.new(today_date.year, today_date.month, 1) # 今月1日
-  last_day = Date.new(today_date.year, today_date.month, -1) # 今月末日
-elsif input_year == 0 && input_month != 0
-  manipulated_year = today_date.year
-  first_day = Date.new(manipulated_year, input_month, 1)
-  last_day = Date.new(manipulated_year, input_month, -1)
-else
-  first_day = Date.new(input_year, input_month, 1)
-  last_day = Date.new(input_year, input_month, -1)
-end
+output_year = input_year.zero? ? Date.today.year : input_year
+output_month = input_month.zero? ? Date.today.month : input_month
+output_first_date = Date.new(output_year, output_month, 1)
+output_last_date = Date.new(output_year, output_month, -1)
 
 # 1日の曜日を取得する。start_atはカレンダーで「1」が表示される位置になる
-start_at = first_day.wday
+start_at = output_first_date.wday
 
 # 当月の日数
-day_count = last_day.day
+day_count = output_last_date.day
 
 # 開始日までの空白(スペース)と当月の日数の合計
 total_days = day_count + start_at
 
 # カレンダー上部のタイトル
-title = "#{first_day.month}月#{first_day.year}"
+title = "#{output_first_date.month}月#{output_first_date.year}"
 print title.to_s.center(22)
 
 # 曜日ラベル
@@ -43,7 +34,7 @@ puts week_labels # 曜日
 
 # 反転させる必要があるか調べるための準備
 just_today = Date.today.day
-retuen_date = Date.new(first_day.year, first_day.month, just_today)
+retuen_date = Date.new(output_first_date.year, output_first_date.month, just_today)
 
 (1..total_days).each do |cal|
   if cal <= start_at
