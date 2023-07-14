@@ -28,9 +28,9 @@ end
 start_at = first_day.wday
 
 #当月の日数
-days = last_day.day
+day_count = last_day.day
 
-days_total = days + start_at # 開始日までの空白(スペース)と当月の日数の合計
+total_days = day_count + start_at # 開始日までの空白(スペース)と当月の日数の合計
 
 week_labels= "\n 日 月 火 水 木 金 土 "
 
@@ -45,7 +45,7 @@ required_year = first_day.year.to_i
 required_month = first_day.month.to_i
 retuen_date = Date.new(required_year,required_month,just_today)
 
-(1..days_total).each do | cal |
+(1..total_days).each do | cal |
   if cal <= start_at
     print "   "
   else
