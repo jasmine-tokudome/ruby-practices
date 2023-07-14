@@ -8,15 +8,15 @@ params = ARGV.getopts("y:m:")
 input_year = params["y"].to_i #入力した年
 input_month = params["m"].to_i #入力した月
 
+today_date = Date.today
+
 if input_year == 0 && input_month == 0
-  now = Date.today
-  this_year = now.year # 今年
-  this_month = now.month #今月
-  first_day = Date.new(now.year,now.month,1) #今月1日
-  last_day = Date.new(now.year,now.month,-1) #今月末日
-elsif input_year == 0 && input_month != 0
-  now = Date.today
-  this_year = now.year
+  this_year = today_date.year # 今年
+  this_month = today_date.month #今月
+  first_day = Date.new(today_date.year,today_date.month,1) #今月1日
+  last_day = Date.new(today_date.year,today_date.month,-1) #今月末日
+elsif input_year == 0 && input_month != 0 
+  this_year = today_date.year
   first_day = Date.new(this_year,input_month,1)
   last_day = Date.new(this_year,input_month,-1)
 else
@@ -56,8 +56,8 @@ print title.to_s.center(22)
 day_of_week= "\n 日 月 火 水 木 金 土 \n"
 print day_of_week # 曜日
 
-now = Date.today #反転させる必要があるか調べるための準備
-just_today = now.day.to_i
+today_date = Date.today #反転させる必要があるか調べるための準備
+just_today = today_date.day.to_i
 required_year = first_day.year.to_i
 required_month = first_day.month.to_i
 retuen_date = Date.new(required_year,required_month,just_today)
@@ -69,7 +69,7 @@ retuen_date = Date.new(required_year,required_month,just_today)
   else
     num = cal - start_at # 当月の日付
     if
-      num == just_today && now == retuen_date
+      num == just_today && today_date == retuen_date
       num = num.to_s.rjust(3)
       print "\e[7m#{num}\e[0m"
     else
