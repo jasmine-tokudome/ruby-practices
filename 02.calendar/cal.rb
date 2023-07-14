@@ -5,23 +5,23 @@ require 'optparse'
 
 params = ARGV.getopts("y:m:")
 
-request_year = params["y"].to_i #入力した年
-request_month = params["m"].to_i #入力した月
+input_year = params["y"].to_i #入力した年
+input_month = params["m"].to_i #入力した月
 
-if request_year == 0 && request_month == 0
+if input_year == 0 && input_month == 0
   now = Date.today
   this_year = now.year # 今年
   this_month = now.month #今月
   first_day = Date.new(now.year,now.month,1) #今月1日
   last_day = Date.new(now.year,now.month,-1) #今月末日
-elsif request_year == 0 && request_month != 0
+elsif input_year == 0 && input_month != 0
   now = Date.today
   this_year = now.year
-  first_day = Date.new(this_year,request_month,1)
-  last_day = Date.new(this_year,request_month,-1)
+  first_day = Date.new(this_year,input_month,1)
+  last_day = Date.new(this_year,input_month,-1)
 else
-  first_day = Date.new(request_year,request_month,1)
-  last_day = Date.new(request_year,request_month,-1)
+  first_day = Date.new(input_year,input_month,1)
+  last_day = Date.new(input_year,input_month,-1)
 end
 
 what_day = first_day.strftime('%a') # 1日の曜日
