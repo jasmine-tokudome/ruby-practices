@@ -27,8 +27,8 @@ end
 # 1日の曜日を取得する。start_atはカレンダーで「1」が表示される位置になる
 start_at = first_day.wday
 
-days_num = last_day - first_day +1
-days = days_num.to_i #当月の日数
+#当月の日数
+days = last_day.day
 
 days_total = days + start_at # 開始日までの空白(スペース)と当月の日数の合計
 
