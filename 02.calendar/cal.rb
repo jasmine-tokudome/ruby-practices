@@ -48,13 +48,12 @@ days = days_num.to_i #当月の日数
 
 days_total = days + start_at # 開始日までの空白(スペース)と当月の日数の合計
 
-day_of_week= "\n 日 月 火 水 木 金 土 \n"
+week_labels= "\n 日 月 火 水 木 金 土 "
 
 title =  "#{first_day.month}月#{first_day.year}"
 print title.to_s.center(22)
 
-day_of_week= "\n 日 月 火 水 木 金 土 \n"
-print day_of_week # 曜日
+puts week_labels # 曜日
 
 today_date = Date.today #反転させる必要があるか調べるための準備
 just_today = today_date.day.to_i
