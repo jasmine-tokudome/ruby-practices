@@ -1,34 +1,12 @@
-# 問題文の「プリントするプログラム」の記載にしたがい
-# printメソッドで書きました。
+# 2つの数字3と5を変数xとyにそれぞれ代入する
+x = 3
+y = 5
 
-a = 3
-b = 5
-
-(1..20).each do | fizzbuzz |
-  if fizzbuzz % ( a * b ) == 0
-    print "FizzBuzz\n"
-  elsif fizzbuzz % a == 0
-    print "Fizz\n"
-  elsif fizzbuzz % b == 0
-    print "Buzz\n"
-  else
-    print "#{fizzbuzz}\n"  
- end
+# 1〜20までの数字を順にnumberに代入し指定した結果を出力させる
+(1..20).each do |number|
+  result_calc = 'Fizz' if number % x == 0 # 3で割り切れる場合はFizz
+  result_calc = 'Buzz' if number % y == 0 # 5で割り切れる場合はBuzz
+  result_calc = 'FizzBuzz' if number % (x * y) == 0 # 15で割り切れる場合はFizzBuzz
+  result_calc = number if result_calc.nil? # 上記いづれにも該当しなかった場合はnu
+  puts "#{result_calc}"
 end
-
-# 以下はputsメソッドバージョン。
-
-# a = 3
-# b = 5
-
-# (1..20).each do | fizzbuzz |
-#   if fizzbuzz % ( a * b ) == 0
-#     puts "FizzBuzz"
-#   elsif fizzbuzz % a == 0
-#     puts "Fizz"
-#   elsif fizzbuzz % b == 0
-#     puts "Buzz"
-#   else
-#     puts "#{fizzbuzz}\n"  
-#  end
-# end
