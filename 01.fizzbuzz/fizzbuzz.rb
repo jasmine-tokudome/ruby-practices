@@ -1,7 +1,7 @@
 # 2つの数字3と5を変数xとyにそれぞれ代入する
-fizz = 3
-buzz = 5
-fizzbuzz = fizz * buzz
+FIZZ = 3
+BUZZ = 5
+FIZZZBUZZ = FIZZ * BUZZ
 
 # 1〜20までの数字を順にnumberに代入し指定した結果を出力させる
 (1..20).each do |number|
