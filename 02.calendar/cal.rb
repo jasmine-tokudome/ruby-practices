@@ -16,7 +16,7 @@ output_first_date = Date.new(output_year, output_month, 1)
 output_last_date = Date.new(output_year, output_month, -1)
 
 # 1日の曜日を取得する。
-start_at = Array.new(output_first_date.wday, "  ")
+day_position_1 = Array.new(output_first_date.wday, "  ")
 
 # 当月の日数
 day_count = Array.new(output_last_date.day) { |i| i + 1 }
@@ -35,7 +35,7 @@ if output_year == Date.today.year && output_month == Date.today.month
 end
 
 # 開始日までの空白(スペース)と当月の日数の合計
-total_days = start_at + day_count
+total_days = day_position_1 + day_count
 
 # カレンダー上部のタイトル
 title = "#{output_first_date.month}月#{output_first_date.year}"
