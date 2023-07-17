@@ -1,13 +1,19 @@
-# 2つの数字3と5を変数xとyにそれぞれ代入する
-FIZZ = 3
-BUZZ = 5
-FIZZZBUZZ = FIZZ * BUZZ
+def check_number(n, fizz, buzz)
+  case
+  when n % (fizz * buzz) == 0
+    "FizzBuzz"
+  when n % buzz == 0
+    "Buzz"
+  when n % fizz == 0
+    "Fizz"
+  else
+    n
+  end
+end
 
-# 1〜20までの数字を順にnumberに代入し指定した結果を出力させる
-(1..20).each do |number|
-  result_calc = 'Fizz' if number % x == 0 # 3で割り切れる場合はFizz
-  result_calc = 'Buzz' if number % y == 0 # 5で割り切れる場合はBuzz
-  result_calc = 'FizzBuzz' if number % (x * y) == 0 # 15で割り切れる場合はFizzBuzz
-  result_calc = number if result_calc.nil? # 上記いづれにも該当しなかった場合はnu
-  puts "#{result_calc}"
+fizz = 3
+buzz = 5
+
+(1..20).each do |n|
+  puts check_number(n, fizz, buzz)
 end
