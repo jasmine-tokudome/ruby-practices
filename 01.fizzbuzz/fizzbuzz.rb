@@ -1,17 +1,14 @@
-cd fizz = 3
+fizz = 3
 buzz = 5
 
-output_array = (1..20).to_a.map do |n|
-  case
-  when n % (fizz * buzz) == 0
-    "FizzBuzz"
-  when n % buzz == 0
-    "Buzz"
-  when n % fizz == 0
-    "Fizz"
+(1..20).each do |fizz_buzz|
+  if fizz_buzz % (fizz * buzz) == 0
+    puts 'FizzBuzz'
+  elsif fizz_buzz % buzz == 0
+    puts 'Buzz'
+  elsif fizz_buzz % fizz == 0
+    puts 'Fizz'
   else
-    n
+    puts "#{fizz_buzz}\n"
   end
 end
-
-puts output_array
