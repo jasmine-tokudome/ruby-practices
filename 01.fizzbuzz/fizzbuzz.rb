@@ -1,4 +1,7 @@
-def check_number(n, fizz, buzz)
+cd fizz = 3
+buzz = 5
+
+output_array = (1..20).to_a.map do |n|
   case
   when n % (fizz * buzz) == 0
     "FizzBuzz"
@@ -11,9 +14,4 @@ def check_number(n, fizz, buzz)
   end
 end
 
-fizz = 3
-buzz = 5
-
-(1..20).each do |n|
-  puts check_number(n, fizz, buzz)
-end
+puts output_array
