@@ -14,7 +14,7 @@ output_first_day = Date.new(output_year, output_month, 1)
 output_last_day = Date.new(output_year, output_month, -1)
 
 # 1日の曜日(1日の前に必要なスペースの数)を取得し配列を作成
-day_position_1 = Array.new(output_first_day.wday, '  ')
+beginning_indent_of_month = Array.new(output_first_day.wday, '  ')
 
 # 当月の日数
 daily_date = (1..output_last_day.day).map { |num| num.to_s.length == 1 ? " #{num}" : num }
@@ -32,7 +32,7 @@ if output_year == Date.today.year && output_month == Date.today.month
 end
 
 # 開始日までの空白(スペース)と当月の日数の合計
-date_for_calender = day_position_1 + daily_date
+date_for_calender = beginning_indent_of_month + daily_date
 
 # カレンダー上部のタイトル
 title = "#{output_first_day.month}月#{output_first_day.year}"
