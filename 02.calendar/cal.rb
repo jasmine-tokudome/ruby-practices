@@ -17,7 +17,7 @@ output_last_day = Date.new(output_year, output_month, -1)
 beginning_indent_of_month = Array.new(output_first_day.wday, '  ')
 
 # 当月の日数
-daily_date = (1..output_last_day.day).map { |num| num.to_s.length == 1 ? " #{num}" : num }
+daily_date = (1..output_last_day.day).map { |num| num.to_s.rjust(2) }
 
 # 出力するデータが今月か調べ、該当する場合は今日の日付の要素を反転させる。
 if output_year == Date.today.year && output_month == Date.today.month
