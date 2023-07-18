@@ -27,17 +27,13 @@ add_point = 0
 frames.each_with_index do |n, idx|
   if n.sum == 10
      if n.last == 0
-      add_point += frames[1+idx].sum
+      add_point += frames[idx+1].sum
      else
-      add_point += frames[1+idx].first
+      add_point += frames[idx+1].first
      end
-    if idx == 8
-      break
-    end
+     break if idx == 8
   end
 end
-
-frames[10]
 
 p add_point
 p shots.sum + add_point
