@@ -9,6 +9,6 @@ buzz = 5
   elsif fizz_buzz % fizz == 0
     puts 'Fizz'
   else
-    puts "#{fizz_buzz}\n"
+    puts "#{fizz_buzz}"
   end
 end
