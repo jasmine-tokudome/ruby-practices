@@ -33,8 +33,10 @@ title = "#{output_first_day.month}月#{output_first_day.year}"
 # 曜日ラベル
 week_labels = '日 月 火 水 木 金 土'
 
-puts title.to_s.center(20), week_labels
-
-date_for_calender.each_slice(7) do |week|
-  puts week.join(' ')
-end
+puts [
+  title.to_s.center(20),
+  week_labels,
+  date_for_calender.each_slice(7).map do |week|
+    week.join(' ')
+  end,
+]
