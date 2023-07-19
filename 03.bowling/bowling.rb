@@ -26,24 +26,24 @@ frames.each_with_index do |n, idx|
   if n.sum == 10
      if n.last == 0
       if frames[idx+1].last == 0 && frames[idx+1].sum == 10 && idx + 2 < 9
-      accumulated_bonus_points += frames[idx+1].first + frames[idx+2].first
+      accumulated_bonus_points += frames[idx+1][0] + frames[idx+2][0]
       else
         accumulated_bonus_points += frames[idx+1].sum
       end
      else
-      accumulated_bonus_points += frames[idx+1].first
+      accumulated_bonus_points += frames[idx+1][0]
      end
-     break if idx == 8
   end
+  break if idx == 8
 end
 
 # 9回と10回の1投目がストライクの場合は、10回目の3投目のスコアを加算する。
-if frames[8].sum == 10 && frames[8].last == 0 && frames[9].sum == 10 && frames[9].last == 0
+if frames[8] == [10,0] && frames[9] == [10,0]
   accumulated_bonus_points += frames[10].first
 end
 
 # 9回目まですべてストライクで10回目が0点ではない場合は10点加算する
-if frames.all? { |frame| frame.last == 0 && frame.sum == 10 } && frames[9].sum != 0 
+if frames.all? { |frame| frame == [10,0] } && frames[9].sum != 0 
   accumulated_bonus_points += 10
 end
 
