@@ -16,19 +16,12 @@ output_last_day = Date.new(output_year, output_month, -1)
 # 1日の曜日(1日の前に必要なスペースの数)を取得し配列を作成
 beginning_indent_of_month = ["  "] * output_first_day.wday
 
-# 当月の日数
+# 当月の日付
 day_numbers_in_month = (1..output_last_day.day).map { |num| num.to_s.rjust(2) }
 
 # 出力するデータが今月か調べ、該当する場合は今日の日付の要素を反転させる。
 if output_year == Date.today.year && output_month == Date.today.month
-  date_for_custom = Date.today.day
-  day_numbers_in_month = day_numbers_in_month.map do |day_value|
-    if day_value == day_numbers_in_month[date_for_custom - 1]
-      "\e[7m#{day_value}\e[0m"
-    else
-      day_value
-    end
-  end
+  day_numbers_in_month[Date.today.day - 1] = "\e[7m#{day_numbers_in_month[Date.today.day - 1]}\e[0m"
 end
 
 # 開始日までの空白(スペース)と当月の日数の合計
