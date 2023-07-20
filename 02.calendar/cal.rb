@@ -11,14 +11,14 @@ input_month = params['m'].to_i # 入力した月
 
 output_year = input_year.zero? ? Date.today.year : input_year
 output_month = input_month.zero? ? Date.today.month : input_month
-output_first_day = Date.new(output_year, output_month, 1)
-output_last_day = Date.new(output_year, output_month, -1)
+output_first_date = Date.new(output_year, output_month, 1)
+output_last_date = Date.new(output_year, output_month, -1)
 
 # 1日の曜日(1日の前に必要なスペースの数)を取得し配列を作成
-beginning_indent_of_month = ['  '] * output_first_day.wday
+beginning_indent_of_month = ['  '] * output_first_date.wday
 
 # 当月の日付
-day_numbers_in_month = (1..output_last_day.day).map { |num| num.to_s.rjust(2) }
+day_numbers_in_month = (1..output_last_date.day).map { |num| num.to_s.rjust(2) }
 
 # 出力するデータが今月か調べ、該当する場合は今日の日付の要素を反転させる。
 if output_year == Date.today.year && output_month == Date.today.month
@@ -29,7 +29,7 @@ end
 date_for_calender = beginning_indent_of_month + day_numbers_in_month
 
 # カレンダー上部のタイトル
-title = "#{output_first_day.month}月#{output_first_day.year}"
+title = "#{output_first_date.month}月#{output_first_date.year}"
 
 # 曜日ラベル
 week_labels = '日 月 火 水 木 金 土'
