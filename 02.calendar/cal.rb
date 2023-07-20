@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 
 require 'date'
 require 'optparse'
@@ -14,7 +15,7 @@ output_first_day = Date.new(output_year, output_month, 1)
 output_last_day = Date.new(output_year, output_month, -1)
 
 # 1日の曜日(1日の前に必要なスペースの数)を取得し配列を作成
-beginning_indent_of_month = ["  "] * output_first_day.wday
+beginning_indent_of_month = ['  '] * output_first_day.wday
 
 # 当月の日付
 day_numbers_in_month = (1..output_last_day.day).map { |num| num.to_s.rjust(2) }
@@ -38,5 +39,5 @@ puts [
   week_labels,
   date_for_calender.each_slice(7).map do |week|
     week.join(' ')
-  end,
+  end
 ]
