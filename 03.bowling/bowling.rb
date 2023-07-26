@@ -16,9 +16,9 @@ end
 frames=shots.each_slice(2).to_a
 
 accumulated_bonus_points = 0
-frames.each_with_index do |n, idx|
-  if n.sum == 10
-    accumulated_bonus_points += if n.last.zero?
+frames.each_with_index do |frame, idx|
+  if frame.sum == 10
+    accumulated_bonus_points += if frame.last.zero?
                                   if frames[idx + 1].last.zero? && frames[idx + 1].sum == 10 && idx + 2 < 9
                                     frames[idx + 1][0] + frames[idx + 2][0]
                                   else
