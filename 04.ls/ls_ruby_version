@@ -1,9 +1,6 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-# カレントディレクトリの配下のファイル名を文字列の配列として取得する。
-file_names = Dir.glob('*')
-
 # 22字以上の文字列が含まれる場合は1列で表示させる
 def display_in_1_columns
   Dir.glob('*')
