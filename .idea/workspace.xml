@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="523f75b3-5660-429f-bcba-34a171f3fa7b" name="変更" comment="">
+    <list default="true" id="523f75b3-5660-429f-bcba-34a171f3fa7b" name="変更" comment="ブロック引数の変数名を変更(idx→frame)/不要な処理を削除/mapへの変更/">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/04.ls/.idea/04.ls.iml" beforeDir="false" afterPath="$PROJECT_DIR$/04.ls/.idea/04.ls.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/04.ls/ls_ruby_version" beforeDir="false" afterPath="$PROJECT_DIR$/04.ls/ls_ruby_version" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -51,6 +53,7 @@
       <workItem from="1690273232389" duration="6000" />
       <workItem from="1690274880646" duration="4654000" />
       <workItem from="1690281248599" duration="286000" />
+      <workItem from="1690377779003" duration="28000" />
     </task>
     <servers />
   </component>

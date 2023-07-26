@@ -1,42 +1,31 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-# カレントディレクトリの配下のファイル名を文字列の配列として取得する。
-file_names = Dir.glob('*')
-
-# 22字以上の文字列が含まれる場合は1列で表示させる
+# 24字以上の文字列が含まれる場合は1列で表示させる
 def display_in_1_columns
   Dir.glob('*')
 end
 
-# すべての文字列が21字以下の場合は3列で表示させる
+# すべての文字列が23字以下の場合は最大3列で表示させる
 def display_in_3_columns
   file_names = Dir.glob('*')
   # 出力時の行数
   number_of_lines = file_names.size / 3 + 1
 
-  # 3列に整形したときに余ってしまう行(余白)に対し要素(nil)を補充する。
-  fill_in_the_blanks = Array.new(number_of_lines * 3 - file_names.size, nil)
-
-  # 成形に必要な要素を補充された配列(ファイル名のリスト).3列に整形したときに最後の要素を保管されている。
-  list_filled_with_blanks = file_names + fill_in_the_blanks
+  # 余ってしまう行(余白)に対し要素(nil)を補充し整形に必要な配列を用意
+  list_filled_with_blanks = file_names + Array.new(number_of_lines * 3 - file_names.size, nil)
 
   # 3列に表示させるため配列を分割する
-  separated_list = []
-  list_filled_with_blanks.each_slice(number_of_lines) do |s|
-    separated_list << s
-  end
+  separated_list = list_filled_with_blanks.each_slice(number_of_lines).to_a
 
   # 横に展開したときに縦に意図した並び(昇順)が実現できるように配列を変更する。
-  swap_vertical_and_horizontal = (separated_list[0]).zip(separated_list[1], separated_list[2])
-
-  swap_vertical_and_horizontal.map do |n|
+  (separated_list[0]).zip(separated_list[1], separated_list[2]).map do |n|
     n.map { |num| num.to_s.ljust(24) }.join
   end
 end
 
-# 22以上の文字列が含まれるかどうかでレイアウトを決める。
-if file_names.any? { |s| s.length >= 22 }
+# 24以上の文字列が含まれるかどうかでレイアウトを決める。
+if Dir.glob('*').any? { |s| s.length >= 24 }
   puts display_in_1_columns
 else
   puts display_in_3_columns
