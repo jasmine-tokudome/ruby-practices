@@ -28,7 +28,7 @@ def display_in_multiple_columns
 end
 
 # 24以上の文字列が含まれるかどうかでレイアウトを決める。
-if Dir.glob('*').any? { |s| s.length >= 24 }
+if Dir.glob('*').any? { |file_name| file_name.length >= 24 }
   puts display_in_1_column
 else
   puts display_in_multiple_columns
