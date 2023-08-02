@@ -1,20 +1,22 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-# 最大列数を定める(今回は最大3列とす)
+# 最大列数を定める(今回は3)
 MAX_VARIABLE_COLUMNS = 3
 
 # 取得するファイル一覧データを定数にする
 FILE_NAMES = Dir.glob('*')
 
-# 表記乱れを防ぐため24字以上の文字列が含まれる場合は1列で表示させる
+# 表記乱れを防ぐため、最大文字数を超えた場合は1列で表示させる(今回は24)
+MAX_FILENAME_LENGTH = 24
+
 def display_in_1_column
   FILE_NAMES
 end
 
-# すべての文字列が23字以下の場合はMAX_VARIABLE_COLUMNSに設定した列数で表示させる
+# すべての文字列が最大文字数以下の場合はMAX_VARIABLE_COLUMNSに設定した列数で表示させる
 def display_in_multiple_columns
-  # 出力時の行数
+  # 出力時の行数。除算時のあまりを考慮し1を加算。
   number_of_lines = FILE_NAMES.size / MAX_VARIABLE_COLUMNS + 1
 
   # 余ってしまう行(余白)に対し要素(nil)を補充し整形に必要な配列を用意
@@ -25,12 +27,12 @@ def display_in_multiple_columns
 
   # 横に展開したときに縦に意図した並び(昇順)が実現できるように配列を変更する。
   (separated_list[0]).zip(separated_list[1], separated_list[2]).map do |n|
-    n.map { |num| num.to_s.ljust(24) }.join
+    n.map { |num| num.to_s.ljust(MAX_FILENAME_LENGTH) }.join
   end
 end
 
-# 24以上の文字列が含まれるかどうかでレイアウトを決める。
-if FILE_NAMES.any? { |s| s.length >= 24 }
+# 最大文字数に達したファイル名が含まれるかどうかで列数を決める。
+if FILE_NAMES.any? { |s| s.length >= MAX_FILENAME_LENGTH }
   puts display_in_1_column
 else
   puts display_in_multiple_columns
