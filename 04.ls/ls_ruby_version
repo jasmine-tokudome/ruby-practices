@@ -1,20 +1,22 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
+# 最大列数を定める(今回は最大3列とす)
+MAX_VARIABLE_COLUMNS = 3
+
 # 表記乱れを防ぐため24字以上の文字列が含まれる場合は1列で表示させる
 def display_in_1_column
   Dir.glob('*')
 end
 
-# すべての文字列が23字以下の場合はcolumsに設定した列数(現時点では3列)で表示させる
+# すべての文字列が23字以下の場合はMAX_VARIABLE_COLUMNSに設定した列数で表示させる
 def display_in_multiple_columns
-  colums = 3
   file_names = Dir.glob('*')
   # 出力時の行数
-  number_of_lines = file_names.size / colums + 1
+  number_of_lines = file_names.size / MAX_VARIABLE_COLUMNS + 1
 
   # 余ってしまう行(余白)に対し要素(nil)を補充し整形に必要な配列を用意
-  list_filled_with_blanks = file_names + Array.new(number_of_lines * colums - file_names.size, nil)
+  list_filled_with_blanks = file_names + Array.new(number_of_lines * MAX_VARIABLE_COLUMNS - file_names.size, nil)
 
   # 3列に表示させるため配列を分割する
   separated_list = list_filled_with_blanks.each_slice(number_of_lines).to_a
