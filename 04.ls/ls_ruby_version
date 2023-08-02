@@ -17,13 +17,13 @@ end
 # すべての文字列が最大文字数以下の場合はMAX_VARIABLE_COLUMNSに設定した列数で表示させる
 def display_in_multiple_columns
   # 出力時の行数。除算時のあまりを考慮し1を加算。
-  number_of_lines = FILE_NAMES.size / MAX_VARIABLE_COLUMNS + 1
+  row = FILE_NAMES.size / MAX_VARIABLE_COLUMNS + 1
 
   # 余ってしまう行(余白)に対し要素(nil)を補充し整形に必要な配列を用意
-  list_filled_with_blanks = FILE_NAMES + Array.new(number_of_lines * MAX_VARIABLE_COLUMNS - FILE_NAMES.size, nil)
+  list_filled_with_blanks = FILE_NAMES + Array.new(row * MAX_VARIABLE_COLUMNS - FILE_NAMES.size, nil)
 
   # 3列に表示させるため配列を分割する
-  separated_list = list_filled_with_blanks.each_slice(number_of_lines).to_a
+  separated_list = list_filled_with_blanks.each_slice(row).to_a
 
   # 横に展開したときに縦に意図した並び(昇順)が実現できるように配列を変更する。
   (separated_list[0]).zip(separated_list[1], separated_list[2]).map do |n|
