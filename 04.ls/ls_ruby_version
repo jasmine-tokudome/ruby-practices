@@ -2,7 +2,7 @@
 # frozen_string_literal: true
 
 # 最大列数を定める(今回は3)
-MAX_VARIABLE_COLUMNS = 3
+MAX_VARIABLE_COLUMNS = 5
 
 def list_directory_contents
 
@@ -16,7 +16,7 @@ def list_directory_contents
   list_filled_with_blanks = file_names + Array.new(number_of_row * MAX_VARIABLE_COLUMNS - file_names.size, nil)
 
   # 最大列数にあわせて配列を分割する
-  separated_list = list_filled_with_blanks.each_slice(number_of_row).to_a
+  separated_list = list_filled_with_blanks.each_slice(MAX_VARIABLE_COLUMNS).to_a
 
   # 最も長いファイル名(文字列)の長さを列幅の基準にする
   max_filename_length = file_names.map(&:length).max
@@ -25,6 +25,7 @@ def list_directory_contents
   (separated_list[0]).zip(separated_list[1], separated_list[2]).map do |n|
     n.map { |num| num.to_s.ljust(max_filename_length) }.join("\t")
   end
+
 end
 
 def run_ls_ruby
