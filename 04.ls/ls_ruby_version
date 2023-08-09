@@ -1,0 +1,33 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# 最大列数を定める(今回は3)
+MAX_VARIABLE_COLUMNS = 3
+
+def list_directory_contents
+  # 取得するファイル一覧データを変数定義する
+  file_names = Dir.glob('*')
+
+  # 出力時の行数を定める(切り上げ)
+  number_of_row = (file_names.size.to_f / MAX_VARIABLE_COLUMNS).ceil
+
+  # 余ってしまう行(余白)に対し要素(nil)を補充し整形に必要な配列を用意
+  list_filled_with_blanks = file_names + Array.new(number_of_row * MAX_VARIABLE_COLUMNS - file_names.size, nil)
+
+  # 最大列数にあわせて配列を分割する
+  separated_directory_contents = list_filled_with_blanks.each_slice(number_of_row).to_a
+
+  # 最も長いファイル名(文字列)の長さを列幅の基準にする
+  max_filename_length = file_names.map(&:length).max
+
+  # 横に展開したときに縦に意図した並び(昇順)が実現できるように配列を変更する。
+  separated_directory_contents.transpose.map do |contents_of_row|
+    contents_of_row.map { |filename| filename.to_s.ljust(max_filename_length) }.join("\t")
+  end
+end
+
+def run
+  puts list_directory_contents
+end
+
+run
