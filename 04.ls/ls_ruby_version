@@ -14,6 +14,7 @@ end
 def list_directory_contents
   file_names = extract_filename_from_input
 
+  # 出力時の行数を定める(切り上げ)
   number_of_row = (file_names.size.to_f / MAX_VARIABLE_COLUMNS).ceil
 
   # 余ってしまう行(余白)に対し要素(nil)を補充し整形に必要な配列を用意
