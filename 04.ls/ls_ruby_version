@@ -8,7 +8,7 @@ MAX_VARIABLE_COLUMNS = 3
 
 def extract_filename_from_input
   params = ARGV.getopts('a')
-  params['a'] == true ? Dir.glob('*', File::FNM_DOTMATCH) : Dir.glob('*')
+  params['a'] ? Dir.glob('*', File::FNM_DOTMATCH) : Dir.glob('*')
 end
 
 def list_directory_contents
