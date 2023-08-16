@@ -1,12 +1,18 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
+require 'optparse'
+
 # 最大列数を定める(今回は3)
 MAX_VARIABLE_COLUMNS = 3
 
+def extract_filename_from_input
+  params = ARGV.getopts('a')
+  params['a'] ? Dir.glob('*', File::FNM_DOTMATCH) : Dir.glob('*')
+end
+
 def list_directory_contents
-  # 取得するファイル一覧データを変数定義する
-  file_names = Dir.glob('*')
+  file_names = extract_filename_from_input
 
   # 出力時の行数を定める(切り上げ)
   number_of_row = (file_names.size.to_f / MAX_VARIABLE_COLUMNS).ceil
