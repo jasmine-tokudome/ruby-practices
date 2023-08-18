@@ -6,13 +6,13 @@ require 'optparse'
 # 最大列数を定める(今回は3)
 MAX_VARIABLE_COLUMNS = 3
 
-def extract_filename_from_input
-  params = ARGV.getopts('a')
-  params['a'] ? Dir.glob('*', File::FNM_DOTMATCH) : Dir.glob('*')
+def reverse_the_filename_of_the_sort
+  params = ARGV.getopts('r')
+  params['r'] ? Dir.glob('*').reverse : Dir.glob('*')
 end
 
 def list_directory_contents
-  file_names = extract_filename_from_input
+  file_names = reverse_the_filename_of_the_sort
 
   # 出力時の行数を定める(切り上げ)
   number_of_row = (file_names.size.to_f / MAX_VARIABLE_COLUMNS).ceil
