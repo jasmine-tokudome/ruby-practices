@@ -2,17 +2,95 @@
 # frozen_string_literal: true
 
 require 'optparse'
+require 'etc'
 
 # 最大列数を定める(今回は3)
 MAX_VARIABLE_COLUMNS = 3
 
-def extract_filename_from_input
-  params = ARGV.getopts('a')
-  params['a'] ? Dir.glob('*', File::FNM_DOTMATCH) : Dir.glob('*')
+# ファイルモードで取得される値のうち権限を示す数字は末尾3桁。
+PERMISSION_NUMBER = -3
+
+def determine_which_method_to_apply_by_option
+  params = ARGV.getopts('l')
+  if params['l']
+    output_with_l_option
+  else
+    puts list_directory_contents
+  end
+end
+
+def fetch_file_name_and_path
+  @file_path = Dir.glob('*').map { |path| "#{Dir.getwd}/#{path}" }
+  @file_name = Dir.glob('*')
+end
+
+def change_numbers_to_symbols(number)
+  numbers_to_symbols = {
+    0 => '---',
+    1 => '--x',
+    2 => '-w-',
+    3 => '-wx',
+    4 => 'r--',
+    5 => 'r-x',
+    6 => 'rw-',
+    7 => 'rwx'
+  }
+
+  permission_numbers = number.to_s(8)[-3..]
+  permission_symbols = permission_numbers.chars.map(&:to_i)
+  permission_symbols.map { |n| numbers_to_symbols[n] }.join
+end
+
+def load_owner_name(file)
+  Etc.getpwuid(File::Stat.new(file).uid).name
+end
+
+def load_group_name(file)
+  Etc.getgrgid(File::Stat.new(file).gid).name
+end
+
+def shape_date(file)
+  date_string = File::Stat.new(file).ctime.to_s
+  match_data = date_string.match(/-\d{2}-\d{2} (\d{2}:\d{2})/)
+  match_data[0].tr('-', ' ')
+end
+
+def calculate_total_number_of_blocks
+  total_blocks = 0
+  @file_path.each do |file|
+    total_blocks += File::Stat.new(file).blocks
+  end
+  total_blocks
+end
+
+def output_with_l_option
+  fetch_file_name_and_path
+  total_blocks = calculate_total_number_of_blocks
+  file_path = @file_path
+
+  puts "total #{total_blocks}"
+
+  file_path.each_with_index do |file, index|
+    file_stats = File::Stat.new(file)
+    permission_string = change_numbers_to_symbols(file_stats.mode)
+    owner_name = load_owner_name(file)[0]
+    group_name = load_group_name(file)[0]
+    file_size = file_stats.size
+    formatted_date = shape_date(file)
+    file_type = file_stats.ftype[0]
+
+    output_line = "#{file_type}#{permission_string}@ " \
+                  "#{file_stats.nlink.to_s.rjust(2)} #{owner_name.to_s.rjust(4)} " \
+                  "#{group_name.to_s.rjust(4)} #{file_size.to_s.rjust(4)} " \
+                  "#{formatted_date.to_s.ljust(4)} #{@file_name[index]}"
+
+    puts output_line
+  end
 end
 
 def list_directory_contents
-  file_names = extract_filename_from_input
+  get_file_name_and_path
+  file_names = @file_name
 
   # 出力時の行数を定める(切り上げ)
   number_of_row = (file_names.size.to_f / MAX_VARIABLE_COLUMNS).ceil
@@ -33,7 +111,7 @@ def list_directory_contents
 end
 
 def run
-  puts list_directory_contents
+  determine_which_method_to_apply_by_option
 end
 
 run
