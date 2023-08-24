@@ -89,7 +89,7 @@ def output_with_l_option
 end
 
 def list_directory_contents
-  get_file_name_and_path
+  fetch_file_name_and_path
   file_names = @file_name
 
   # 出力時の行数を定める(切り上げ)
