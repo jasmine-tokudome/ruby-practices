@@ -42,11 +42,11 @@ def change_numbers_to_symbols(number)
 end
 
 def load_owner_name(file)
-  Etc.getpwuid(File::Stat.new(file).uid).name
+  Etc.getpwuid(File::Stat.new(file).uid)
 end
 
 def load_group_name(file)
-  Etc.getgrgid(File::Stat.new(file).gid).name
+  Etc.getgrgid(File::Stat.new(file).gid)
 end
 
 def shape_date(file)
@@ -79,7 +79,7 @@ def output_with_l_option
     formatted_date = shape_date(file)
     file_type = file_stats.ftype[0]
 
-    output_line = "#{file_type}#{permission_string}@ " \
+    output_line = "#{file_type}#{permission_string} " \
                   "#{file_stats.nlink.to_s.rjust(2)} #{owner_name.to_s.rjust(4)} " \
                   "#{group_name.to_s.rjust(4)} #{file_size.to_s.rjust(4)} " \
                   "#{formatted_date.to_s.ljust(4)} #{@file_name[index]}"
