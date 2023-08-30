@@ -36,7 +36,7 @@ def change_numbers_to_symbols(number)
     7 => 'rwx'
   }
 
-  permission_numbers = number.to_s(8)[-3..]
+  permission_numbers = number.to_s(8)[(PERMISSION_NUMBER)..]
   permission_symbols = permission_numbers.chars.map(&:to_i)
   permission_symbols.map { |n| numbers_to_symbols[n] }.join
 end
