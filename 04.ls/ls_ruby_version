@@ -14,7 +14,7 @@ PERMISSION_NUMBER = -3
 @file_names = Dir.glob('*')
 
 def change_numbers_to_symbols(number)
-  numbers_to_symbols = {()
+  numbers_to_symbols = {
     0 => '---',
     1 => '--x',
     2 => '-w-',
@@ -30,12 +30,6 @@ def change_numbers_to_symbols(number)
   permission_symbols.map { |n| numbers_to_symbols[n] }.join
 end
 
-def shape_date(file)
-  date_string = File::Stat.new(file).ctime.to_s
-  match_data = date_string.match(/-\d{2}-\d{2} (\d{2}:\d{2})/)
-  match_data[0].tr('-', ' ')
-end
-
 def calculate_total_blocks
   file_names = @file_names
 
@@ -47,7 +41,7 @@ def calculate_total_blocks
     owner_name = Etc.getpwuid(File::Stat.new(file).uid)[0]
     group_name = Etc.getgrgid(File::Stat.new(file).gid)[0]
     file_size = file_stats.size
-    formatted_date = shape_date(file)
+    formatted_date = File::Stat.new(file).ctime.strftime("%_m %e %H:%M")
     file_type = file_stats.ftype[0]
     output_line = "#{file_type}#{permission_string} " \
                   "#{file_stats.nlink.to_s.rjust(file_stats.nlink.to_s.length)} #{owner_name.rjust(owner_name.length)} " \
