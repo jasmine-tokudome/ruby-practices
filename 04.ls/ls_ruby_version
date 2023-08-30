@@ -47,11 +47,7 @@ def shape_date(file)
 end
 
 def calculate_total_number_of_blocks
-  total_blocks = 0
-  @file_path.each do |file|
-    total_blocks += File::Stat.new(file).blocks
-  end
-  total_blocks
+  @file_path.sum{ |file| File::Stat.new(file).blocks }
 end
 
 def output_with_l_option
