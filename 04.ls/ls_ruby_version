@@ -32,14 +32,6 @@ def change_numbers_to_symbols(number)
   permission_symbols.map { |n| numbers_to_symbols[n] }.join
 end
 
-def load_owner_name(file)
-  Etc.getpwuid(File::Stat.new(file).uid)
-end
-
-def load_group_name(file)
-  Etc.getgrgid(File::Stat.new(file).gid)
-end
-
 def shape_date(file)
   date_string = File::Stat.new(file).ctime.to_s
   match_data = date_string.match(/-\d{2}-\d{2} (\d{2}:\d{2})/)
@@ -60,8 +52,8 @@ def calculate_total_blocks
   file_path.each_with_index do |file, index|
     file_stats = File::Stat.new(file)
     permission_string = change_numbers_to_symbols(file_stats.mode)
-    owner_name = load_owner_name(file)[0]
-    group_name = load_group_name(file)[0]
+    owner_name = Etc.getpwuid(File::Stat.new(file).uid)[0]
+    group_name = Etc.getgrgid(File::Stat.new(file).gid)[0]
     file_size = file_stats.size
     formatted_date = shape_date(file)
     file_type = file_stats.ftype[0]
