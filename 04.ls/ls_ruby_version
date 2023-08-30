@@ -10,9 +10,7 @@ MAX_VARIABLE_COLUMNS = 3
 # ファイルモードで取得される値のうち権限を示す数字は末尾3桁。
 PERMISSION_NUMBER = -3
 
-def fetch_file_name_and_path
-  @file_name = Dir.glob('*')
-end
+@file_names = Dir.glob('*')
 
 def change_numbers_to_symbols(number)
   numbers_to_symbols = {
@@ -26,7 +24,7 @@ def change_numbers_to_symbols(number)
     7 => 'rwx'
   }
 
-  permission_numbers = number.to_s(8)[(PERMISSION_NUMBER)..]
+  permission_numbers = number.to_s(8)[PERMISSION_NUMBER..]
   permission_symbols = permission_numbers.chars.map(&:to_i)
   permission_symbols.map { |n| numbers_to_symbols[n] }.join
 end
@@ -38,17 +36,16 @@ def shape_date(file)
 end
 
 def calculate_total_number_of_blocks
-  @file_name.sum{ |file| File::Stat.new(file).blocks }
+  @file_names.sum { |file| File::Stat.new(file).blocks }
 end
 
 def calculate_total_blocks
-  fetch_file_name_and_path
   total_blocks = calculate_total_number_of_blocks
-  file_name = @file_name
+  file_names = @file_names
 
   puts "total #{total_blocks}"
 
-  file_name.each_with_index do |file, index|
+  file_names.each_with_index do |file, index|
     file_stats = File::Stat.new(file)
     permission_string = change_numbers_to_symbols(file_stats.mode)
     owner_name = Etc.getpwuid(File::Stat.new(file).uid)[0]
@@ -59,14 +56,13 @@ def calculate_total_blocks
     output_line = "#{file_type}#{permission_string} " \
                   "#{file_stats.nlink.to_s.rjust(file_stats.nlink.to_s.length)} #{owner_name.rjust(owner_name.length)} " \
                   "#{group_name.rjust(group_name.length)} #{file_size.to_s.rjust(file_size.to_s.length)} " \
-                  "#{formatted_date.to_s.rjust(formatted_date.to_s.length)} #{@file_name[index]}"
+                  "#{formatted_date.to_s.rjust(formatted_date.to_s.length)} #{file_names[index]}"
     puts output_line
   end
 end
 
 def list_directory_contents
-  fetch_file_name_and_path
-  file_names = @file_name
+  file_names = @file_names
 
   # 出力時の行数を定める(切り上げ)
   number_of_row = (file_names.size.to_f / MAX_VARIABLE_COLUMNS).ceil
