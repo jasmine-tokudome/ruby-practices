@@ -10,10 +10,11 @@ MAX_VARIABLE_COLUMNS = 3
 # ファイルモードで取得される値のうち権限を示す数字は末尾3桁。
 PERMISSION_NUMBER = -3
 
+# カレントディレクトリ配下にあるファイル名を取得
 @file_names = Dir.glob('*')
 
 def change_numbers_to_symbols(number)
-  numbers_to_symbols = {
+  numbers_to_symbols = {()
     0 => '---',
     1 => '--x',
     2 => '-w-',
@@ -35,15 +36,10 @@ def shape_date(file)
   match_data[0].tr('-', ' ')
 end
 
-def calculate_total_number_of_blocks
-  @file_names.sum { |file| File::Stat.new(file).blocks }
-end
-
 def calculate_total_blocks
-  total_blocks = calculate_total_number_of_blocks
   file_names = @file_names
 
-  puts "total #{total_blocks}"
+  puts "total #{@file_names.sum { |file| File::Stat.new(file).blocks }}"
 
   file_names.each_with_index do |file, index|
     file_stats = File::Stat.new(file)
