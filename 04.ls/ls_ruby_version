@@ -50,7 +50,7 @@ def calculate_total_number_of_blocks
   @file_path.sum{ |file| File::Stat.new(file).blocks }
 end
 
-def output_with_l_option
+def calculate_total_blocks
   fetch_file_name_and_path
   total_blocks = calculate_total_number_of_blocks
   file_path = @file_path
@@ -100,7 +100,7 @@ end
 def run
   params = ARGV.getopts('l')
   if params['l']
-    output_with_l_option
+    calculate_total_blocks
   else
     puts list_directory_contents
   end
