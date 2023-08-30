@@ -67,8 +67,8 @@ def calculate_total_blocks
     file_type = file_stats.ftype[0]
 
     output_line = "#{file_type}#{permission_string} " \
-                  "#{file_stats.nlink.to_s.rjust(2)} #{owner_name.to_s.rjust(4)} " \
-                  "#{group_name.to_s.rjust(4)} #{file_size.to_s.rjust(4)} " \
+                  "#{file_stats.nlink.to_s.rjust(2)} #{owner_name.rjust(4)} " \
+                  "#{group_name.rjust(4)} #{file_size.to_s.rjust(4)} " \
                   "#{formatted_date.to_s.ljust(4)} #{@file_name[index]}"
 
     puts output_line
