@@ -37,13 +37,13 @@ def calculate_total_blocks
 
   file_names.each_with_index do |file, index|
     file_stats = File::Stat.new(file)
-    permission_string = change_numbers_to_symbols(file_stats.mode)
+    permission_symbols= change_numbers_to_symbols(file_stats.mode)
     owner_name = Etc.getpwuid(File::Stat.new(file).uid)[0]
     group_name = Etc.getgrgid(File::Stat.new(file).gid)[0]
     file_size = file_stats.size
     formatted_date = File::Stat.new(file).ctime.strftime("%_m %e %H:%M")
     file_type = file_stats.ftype[0]
-    output_line = "#{file_type}#{permission_string} " \
+    output_line = "#{file_type}#{permission_symbols} " \
                   "#{file_stats.nlink.to_s.rjust(file_stats.nlink.to_s.length)} #{owner_name.rjust(owner_name.length)} " \
                   "#{group_name.rjust(group_name.length)} #{file_size.to_s.rjust(file_size.to_s.length)} " \
                   "#{formatted_date.to_s.rjust(formatted_date.to_s.length)} #{file_names[index]}"
