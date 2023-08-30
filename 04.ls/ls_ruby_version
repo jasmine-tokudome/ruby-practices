@@ -11,7 +11,6 @@ MAX_VARIABLE_COLUMNS = 3
 PERMISSION_NUMBER = -3
 
 def fetch_file_name_and_path
-  @file_path = Dir.glob('*').map { |path| "#{Dir.getwd}/#{path}" }
   @file_name = Dir.glob('*')
 end
 
@@ -39,17 +38,17 @@ def shape_date(file)
 end
 
 def calculate_total_number_of_blocks
-  @file_path.sum{ |file| File::Stat.new(file).blocks }
+  @file_name.sum{ |file| File::Stat.new(file).blocks }
 end
 
 def calculate_total_blocks
   fetch_file_name_and_path
   total_blocks = calculate_total_number_of_blocks
-  file_path = @file_path
+  file_name = @file_name
 
   puts "total #{total_blocks}"
 
-  file_path.each_with_index do |file, index|
+  file_name.each_with_index do |file, index|
     file_stats = File::Stat.new(file)
     permission_string = change_numbers_to_symbols(file_stats.mode)
     owner_name = Etc.getpwuid(File::Stat.new(file).uid)[0]
@@ -57,12 +56,10 @@ def calculate_total_blocks
     file_size = file_stats.size
     formatted_date = shape_date(file)
     file_type = file_stats.ftype[0]
-
     output_line = "#{file_type}#{permission_string} " \
-                  "#{file_stats.nlink.to_s.rjust(2)} #{owner_name.rjust(4)} " \
-                  "#{group_name.rjust(4)} #{file_size.to_s.rjust(4)} " \
-                  "#{formatted_date.to_s.ljust(4)} #{@file_name[index]}"
-
+                  "#{file_stats.nlink.to_s.rjust(file_stats.nlink.to_s.length)} #{owner_name.rjust(owner_name.length)} " \
+                  "#{group_name.rjust(group_name.length)} #{file_size.to_s.rjust(file_size.to_s.length)} " \
+                  "#{formatted_date.to_s.rjust(formatted_date.to_s.length)} #{@file_name[index]}"
     puts output_line
   end
 end
