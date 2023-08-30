@@ -10,15 +10,6 @@ MAX_VARIABLE_COLUMNS = 3
 # ファイルモードで取得される値のうち権限を示す数字は末尾3桁。
 PERMISSION_NUMBER = -3
 
-def determine_which_method_to_apply_by_option
-  params = ARGV.getopts('l')
-  if params['l']
-    output_with_l_option
-  else
-    puts list_directory_contents
-  end
-end
-
 def fetch_file_name_and_path
   @file_path = Dir.glob('*').map { |path| "#{Dir.getwd}/#{path}" }
   @file_name = Dir.glob('*')
@@ -111,7 +102,12 @@ def list_directory_contents
 end
 
 def run
-  determine_which_method_to_apply_by_option
+  params = ARGV.getopts('l')
+  if params['l']
+    output_with_l_option
+  else
+    puts list_directory_contents
+  end
 end
 
 run
