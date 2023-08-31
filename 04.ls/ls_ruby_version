@@ -3,6 +3,7 @@
 
 require 'optparse'
 require 'etc'
+require 'debug'
 
 # 最大列数を定める(今回は3)
 MAX_VARIABLE_COLUMNS = 3
@@ -13,8 +14,8 @@ PERMISSION_NUMBER = -3
 # カレントディレクトリ配下にあるファイル名を取得
 @file_names = Dir.glob('*')
 
-def change_numbers_to_symbols(number)
-  numbers_to_symbols = {
+module PermissionConstants
+  NUMBERS_TO_SYMBOLS = {
     0 => '---',
     1 => '--x',
     2 => '-w-',
@@ -23,30 +24,42 @@ def change_numbers_to_symbols(number)
     5 => 'r-x',
     6 => 'rw-',
     7 => 'rwx'
-  }
+  }.freeze
+end
 
+def change_numbers_to_symbols(number)
   permission_numbers = number.to_s(8)[PERMISSION_NUMBER..]
   permission_symbols = permission_numbers.chars.map(&:to_i)
-  permission_symbols.map { |n| numbers_to_symbols[n] }.join
+  permission_symbols.map { |permission_number| PermissionConstants::NUMBERS_TO_SYMBOLS[permission_number] }.join
+end
+
+def calculate_colum_length
+  file_names = @file_names
+  file_stats = file_names.map { |file| File::Stat.new(file) }
+  @nlink_max_length = file_stats.map { |file_stat| file_stat.nlink.to_s.length }.max
+  @owner_name_max_length = file_stats.map { |file_stat| Etc.getpwuid(file_stat.uid)[0].length }.max
+  @group_name_max_length = file_stats.map { |file_stat| Etc.getgrgid(file_stat.gid)[0].length }.max
+  @file_size_max_length = file_stats.map { |file_stat| file_stat.size.to_s.length }.max
 end
 
 def calculate_total_blocks
   file_names = @file_names
+  calculate_colum_length
 
   puts "total #{@file_names.sum { |file| File::Stat.new(file).blocks }}"
-
   file_names.each_with_index do |file, index|
     file_stats = File::Stat.new(file)
-    permission_symbols= change_numbers_to_symbols(file_stats.mode)
+    permission_symbols = change_numbers_to_symbols(file_stats.mode)
     owner_name = Etc.getpwuid(File::Stat.new(file).uid)[0]
     group_name = Etc.getgrgid(File::Stat.new(file).gid)[0]
     file_size = file_stats.size
-    formatted_date = File::Stat.new(file).ctime.strftime("%_m %e %H:%M")
-    file_type = file_stats.ftype[0]
+    formatted_date = File::Stat.new(file).ctime.strftime('%_m %e %H:%M')
+    file_type_default = file_stats.ftype[0]
+    file_type = file_type_default == 'f' ? '-' : file_stats.ftype[0]
     output_line = "#{file_type}#{permission_symbols} " \
-                  "#{file_stats.nlink.to_s.rjust(file_stats.nlink.to_s.length)} #{owner_name.rjust(owner_name.length)} " \
-                  "#{group_name.rjust(group_name.length)} #{file_size.to_s.rjust(file_size.to_s.length)} " \
-                  "#{formatted_date.to_s.rjust(formatted_date.to_s.length)} #{file_names[index]}"
+                  "#{file_stats.nlink.to_s.rjust(@nlink_max_length)} #{owner_name.rjust(@owner_name_max_length)} " \
+                  "#{group_name.rjust(@group_name_max_length)} #{file_size.to_s.rjust(@file_size_max_length)} " \
+                  "#{formatted_date} #{file_names[index]}"
     puts output_line
   end
 end
