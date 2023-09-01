@@ -10,9 +10,6 @@ MAX_VARIABLE_COLUMNS = 3
 # ファイルモードで取得される値のうち権限を示す数字は末尾3桁。
 PERMISSION_NUMBER = -3
 
-# カレントディレクトリ配下にあるファイル名を取得
-@file_names = Dir.glob('*')
-
 module PermissionConstants
   NUMBERS_TO_SYMBOLS = {
     0 => '---',
@@ -32,8 +29,7 @@ def change_numbers_to_symbols(number)
   permission_symbols.map { |permission_number| PermissionConstants::NUMBERS_TO_SYMBOLS[permission_number] }.join
 end
 
-def calculate_colum_length
-  file_names = @file_names
+def calculate_colum_length(file_names)
   file_stat = file_names.map { |file| File::Stat.new(file) }
   @nlink_max_length = file_stat.map { |file_stat| file_stat.nlink.to_s.length }.max
   @owner_name_max_length = file_stat.map { |file_stat| Etc.getpwuid(file_stat.uid)[0].length }.max
@@ -41,11 +37,10 @@ def calculate_colum_length
   @file_size_max_length = file_stat.map { |file_stat| file_stat.size.to_s.length }.max
 end
 
-def calculate_total_blocks
-  file_names = @file_names
-  calculate_colum_length
+def calculate_total_blocks(file_names)
+  calculate_colum_length(file_names)
 
-  puts "total #{@file_names.sum { |file_name| File::Stat.new(file_name).blocks }}"
+  puts "total #{file_names.sum { |file_name| File::Stat.new(file_name).blocks }}"
   file_names.each_with_index do |file, index|
     file_stat = File::Stat.new(file)
     permission_symbols = change_numbers_to_symbols(file_stat.mode)
@@ -63,9 +58,7 @@ def calculate_total_blocks
   end
 end
 
-def list_directory_contents
-  file_names = @file_names
-
+def list_directory_contents(file_names)
   # 出力時の行数を定める(切り上げ)
   number_of_row = (file_names.size.to_f / MAX_VARIABLE_COLUMNS).ceil
 
@@ -86,10 +79,11 @@ end
 
 def run
   params = ARGV.getopts('l')
+  file_names = Dir.glob('*')
   if params['l']
-    calculate_total_blocks
+    calculate_total_blocks(file_names)
   else
-    puts list_directory_contents
+    puts list_directory_contents(file_names)
   end
 end
 
