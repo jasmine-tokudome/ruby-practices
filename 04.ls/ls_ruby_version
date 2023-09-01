@@ -45,7 +45,7 @@ def calculate_total_blocks
   file_names = @file_names
   calculate_colum_length
 
-  puts "total #{@file_names.sum { |file| File::Stat.new(file).blocks }}"
+  puts "total #{@file_names.sum { |file_name| File::Stat.new(file_name).blocks }}"
   file_names.each_with_index do |file, index|
     file_stats = File::Stat.new(file)
     permission_symbols = change_numbers_to_symbols(file_stats.mode)
