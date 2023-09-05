@@ -2,18 +2,70 @@
 # frozen_string_literal: true
 
 require 'optparse'
+require 'etc'
 
 # 最大列数を定める(今回は3)
 MAX_VARIABLE_COLUMNS = 3
 
-def reverse_the_filename_of_the_sort
-  params = ARGV.getopts('r')
-  params['r'] ? Dir.glob('*').reverse : Dir.glob('*')
+# ファイルモードで取得される値のうち権限を示す数字は末尾3桁。
+PERMISSION_NUMBER = -3
+
+PERMISSION_NUMBERS_TO_SYMBOLS = {
+  0 => '---',
+  1 => '--x',
+  2 => '-w-',
+  3 => '-wx',
+  4 => 'r--',
+  5 => 'r-x',
+  6 => 'rw-',
+  7 => 'rwx'
+}.freeze
+
+def change_numbers_to_symbols(number)
+  permission_numbers = number.to_s(8)[PERMISSION_NUMBER..]
+  permission_symbols = permission_numbers.chars.map(&:to_i)
+  permission_symbols.map { |permission_number| PERMISSION_NUMBERS_TO_SYMBOLS[permission_number] }.join
 end
 
-def list_directory_contents
-  file_names = reverse_the_filename_of_the_sort
+def calculate_colum_length(file_names)
+  file_stats = file_names.map { |file| File::Stat.new(file) }
+  nlink_max_length = file_stats.map { |file_stat| file_stat.nlink.to_s.length }.max
+  owner_name_max_length = file_stats.map { |file_stat| Etc.getpwuid(file_stat.uid)[0].length }.max
+  group_name_max_length = file_stats.map { |file_stat| Etc.getgrgid(file_stat.gid)[0].length }.max
+  file_size_max_length = file_stats.map { |file_stat| file_stat.size.to_s.length }.max
+  [
+    nlink_max_length,
+    owner_name_max_length,
+    group_name_max_length,
+    file_size_max_length
+  ]
+end
 
+def calculate_total_blocks(file_names)
+  nlink_max_length,
+    owner_name_max_length,
+    group_name_max_length,
+    file_size_max_length = calculate_colum_length(file_names)
+
+  puts "total #{file_names.sum { |file_name| File::Stat.new(file_name).blocks }}"
+  file_names.each_with_index do |file, index|
+    file_stat = File::Stat.new(file)
+    permission_symbols = change_numbers_to_symbols(file_stat.mode)
+    owner_name = Etc.getpwuid(file_stat.uid)[0]
+    group_name = Etc.getgrgid(file_stat.gid)[0]
+    file_size = file_stat.size
+    formatted_date = file_stat.ctime.strftime('%_m %e %H:%M')
+    file_type_default = file_stat.ftype[0]
+    file_type = file_type_default == 'f' ? '-' : file_stat.ftype[0]
+    output_line = "#{file_type}#{permission_symbols} " \
+                  "#{file_stat.nlink.to_s.rjust(nlink_max_length)} #{owner_name.rjust(owner_name_max_length)} " \
+                  "#{group_name.rjust(group_name_max_length)} #{file_size.to_s.rjust(file_size_max_length)} " \
+                  "#{formatted_date} #{file_names[index]}"
+    puts output_line
+  end
+end
+
+def list_directory_contents(file_names)
   # 出力時の行数を定める(切り上げ)
   number_of_row = (file_names.size.to_f / MAX_VARIABLE_COLUMNS).ceil
 
@@ -33,7 +85,13 @@ def list_directory_contents
 end
 
 def run
-  puts list_directory_contents
+  params = ARGV.getopts('l')
+  file_names = Dir.glob('*')
+  if params['l']
+    calculate_total_blocks(file_names)
+  else
+    puts list_directory_contents(file_names)
+  end
 end
 
 run
