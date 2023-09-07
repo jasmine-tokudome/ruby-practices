@@ -79,19 +79,38 @@ def list_directory_contents(file_names)
   max_filename_length = file_names.map(&:length).max
 
   # 横に展開したときに縦に意図した並び(昇順)が実現できるように配列を変更する。
-  separated_directory_contents.transpose.map do |contents_of_row|
+  contents_list = separated_directory_contents.transpose.map do |contents_of_row|
     contents_of_row.map { |filename| filename.to_s.ljust(max_filename_length) }.join("\t")
   end
+
+  contents_list.each { |row| puts row }
 end
 
 def run
-  params = ARGV.getopts('l')
-  file_names = Dir.glob('*')
-  if params['l']
-    calculate_total_blocks(file_names)
-  else
-    puts list_directory_contents(file_names)
-  end
+  options = {}
+  OptionParser.new do |opts|
+    opts.on('-a', /a/) do
+      options[:all] = true
+    end
+
+    opts.on('-l', /l/) do
+      options[:long] = true
+    end
+
+    opts.on('-r', /r/) do
+      options[:reverse] = true
+    end
+  end.parse!
+
+  file_names = if options[:all]
+                 Dir.glob('*', File::FNM_DOTMATCH)
+               else
+                 Dir.glob('*')
+               end
+
+  file_names = file_names.reverse if options[:reverse]
+
+  options[:long] ? calculate_total_blocks(file_names) : list_directory_contents(file_names)
 end
 
 run
