@@ -28,7 +28,7 @@ def change_numbers_to_symbols(number)
 end
 
 def calculate_total_blocks(file_names)
-  puts "total #{file_names.sum { |file_name| File::Stat.new(file_name).blocks }}"
+  file_names.sum { |file_name| File::Stat.new(file_name).blocks }
 end
 
 def output_long_contents(file_names)
@@ -69,11 +69,9 @@ def list_directory_contents(file_names)
   max_filename_length = file_names.map(&:length).max
 
   # 横に展開したときに縦に意図した並び(昇順)が実現できるように配列を変更する。
-  contents_list = separated_directory_contents.transpose.map do |contents_of_row|
+  separated_directory_contents.transpose.map do |contents_of_row|
     contents_of_row.map { |filename| filename.to_s.ljust(max_filename_length) }.join("\t")
   end
-
-  puts contents_list
 end
 
 def run
@@ -97,10 +95,10 @@ def run
   file_names = file_names.reverse if options[:reverse]
 
   if options[:long]
-    calculate_total_blocks(file_names)
+    puts "total #{calculate_total_blocks(file_names)}"
     output_long_contents(file_names)
   else
-    list_directory_contents(file_names)
+    puts list_directory_contents(file_names)
   end
 end
 
