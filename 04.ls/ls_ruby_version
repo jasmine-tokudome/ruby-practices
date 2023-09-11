@@ -27,27 +27,17 @@ def change_numbers_to_symbols(number)
   permission_symbols.map { |permission_number| PERMISSION_NUMBERS_TO_SYMBOLS[permission_number] }.join
 end
 
-def calculate_colum_length(file_names)
+def calculate_total_blocks(file_names)
+  file_names.sum { |file_name| File::Stat.new(file_name).blocks }
+end
+
+def output_long_contents(file_names)
   file_stats = file_names.map { |file| File::Stat.new(file) }
   nlink_max_length = file_stats.map { |file_stat| file_stat.nlink.to_s.length }.max
   owner_name_max_length = file_stats.map { |file_stat| Etc.getpwuid(file_stat.uid)[0].length }.max
   group_name_max_length = file_stats.map { |file_stat| Etc.getgrgid(file_stat.gid)[0].length }.max
   file_size_max_length = file_stats.map { |file_stat| file_stat.size.to_s.length }.max
-  [
-    nlink_max_length,
-    owner_name_max_length,
-    group_name_max_length,
-    file_size_max_length
-  ]
-end
 
-def calculate_total_blocks(file_names)
-  nlink_max_length,
-    owner_name_max_length,
-    group_name_max_length,
-    file_size_max_length = calculate_colum_length(file_names)
-
-  puts "total #{file_names.sum { |file_name| File::Stat.new(file_name).blocks }}"
   file_names.each_with_index do |file, index|
     file_stat = File::Stat.new(file)
     permission_symbols = change_numbers_to_symbols(file_stat.mode)
@@ -85,10 +75,28 @@ def list_directory_contents(file_names)
 end
 
 def run
-  params = ARGV.getopts('l')
-  file_names = Dir.glob('*')
-  if params['l']
-    calculate_total_blocks(file_names)
+  options = {}
+  OptionParser.new do |opts|
+    opts.on('-a', /a/) do
+      options[:all] = true
+    end
+
+    opts.on('-l', /l/) do
+      options[:long] = true
+    end
+
+    opts.on('-r', /r/) do
+      options[:reverse] = true
+    end
+  end.parse!
+
+  file_names = options[:all] ? Dir.glob('*', File::FNM_DOTMATCH) : Dir.glob('*')
+
+  file_names = file_names.reverse if options[:reverse]
+
+  if options[:long]
+    puts "total #{calculate_total_blocks(file_names)}"
+    output_long_contents(file_names)
   else
     puts list_directory_contents(file_names)
   end
