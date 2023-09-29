@@ -9,11 +9,11 @@ class Game
     @frames ||= begin
                   frames = []
                   shot = Shot.new(input_marks)
-                  shot.convert_mark_to_score.each_slice(2) do |first_shot, second_shot|
+                  shot.make_shot_instances.each_slice(2) do |first_shot, second_shot|
                     frames << Frame.new(first_shot, second_shot)
                   end
-                  if shot.convert_mark_to_score.length % 2 == 1
-                    last_shot = shot.convert_mark_to_score.last
+                  if shot.make_shot_instances.length % 2 == 1
+                    last_shot = shot.make_shot_instances.last
                     frames[9].instance_variable_set(:@third_shot, Shot.new(last_shot))
                     frames.pop
                   end
