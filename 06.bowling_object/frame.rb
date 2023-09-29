@@ -11,7 +11,7 @@ class Frame
     @frame_number = self.class.next_index
   end
 
-  def score
+  def calculate_1frame_score
     [first_shot.mark,second_shot.mark,third_shot.mark].compact.sum
   end
 
