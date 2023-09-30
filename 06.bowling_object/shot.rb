@@ -14,7 +14,7 @@ class Shot
   def convert_marks_to_scores
     input_marks = ARGV[0]
     add_0_after_markX = input_marks.gsub(/X/, 'X,0')
-    modified_scores = add_0_after_markX.gsub(/(?<=.{19})X0/, 'X')
+    modified_scores = add_0_after_markX.gsub(/(?<=.{18})X0/, 'X')
     modified_scores.split(",").map do |mark|
       Shot.new(mark).change_1mark_to_1score
     end
